@@ -1,0 +1,41 @@
+/* CalendarGfg.css */
+.calendar-container {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center align the flex items */
+    padding: 1rem;
+
+  }
+  
+  .flex-container {
+    display: flex;
+    justify-content: space-between; /* Distribute space between selectors */
+    width: 100%; /* Full width to contain the selectors */
+    margin-bottom: 1rem; /* Space between selectors and calendar */
+  }
+  
+  .select-label {
+    margin-bottom: 0.25rem; /* Smaller space under the label */
+  }
+  
+  .select-input {
+    padding: 0.5rem;
+    margin-right: 0.5rem; /* Add space between selectors */
+  }
+  
+  .button-schedule {
+    border-radius: 0.5rem; /* Tailwind's rounded-lg */
+    background-color: #000000; /* Tailwind's bg-black */
+    color: #ffffff; /* Tailwind's text-white */
+    padding: 0.5rem 1rem; /* Tailwind's py-2 px-4 */
+    margin-top: 0.75rem; /* Tailwind's mt-3 */
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: 1rem; 
+  
+  }
+  
+  /* You'll need to add additional styles for other elements if necessary */
+  

@@ -1,0 +1,35 @@
+/* Sidebar.css */
+
+.sidebar-card {
+  height: calc(70vh - 2rem);
+  width: 100%;
+  max-width: 20rem;
+  padding: 1rem; /* Adjust padding as needed */
+  box-shadow: 0 25px 50px -12px rgba(31, 38, 135, 0.37);
+  margin-top: 10rem;
+  margin-left: 2.5rem;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Aligns items to the start of the flex container */
+}
+
+.sidebar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* Spacing between items */
+}
+
+.sidebar-list-item {
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.3s;
+  padding: 0.1rem 3rem; /* Adjust padding for each item */
+  color: black; /* Set text color to black */
+  text-decoration: none; /* Remove underline from links */
+}
+
+.sidebar-list-item:hover {
+  background: #e5e5e5;
+  text-decoration: none; /* Ensure underline doesn't appear on hover */
+}

@@ -1,0 +1,15 @@
+/* MainAnalytics.css */
+.analytics-container {
+    margin-top: -1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 58vh; /* Approximate conversion of Tailwind's h-[58vh] */
+  }
+  
+  .chart-container {
+    margin-top: 0.5rem; /* Approximate conversion of Tailwind's mt-2 */
+    width: 100%;
+    max-width: 80vh; /* Approximate conversion of Tailwind's max-w-[60vh] */
+  }
+  

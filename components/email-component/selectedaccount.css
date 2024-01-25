@@ -1,0 +1,66 @@
+/* SelectedAccount.css */
+
+.account-chooser-label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.5rem; /* Space below the label */
+}
+
+.account-selection-container {
+  border: 1px solid #ddd; /* Light grey border around the container */
+  padding: 0.5rem; /* Padding inside the container */
+  margin-top: 0.5rem; /* Space above the container */
+  margin-bottom: 0.5rem; /* Space below the container */
+  max-width: 100%; /* Container width does not exceed the parent element */
+  overflow-y: auto; /* Allows vertical scrolling if the content is tall */
+}
+
+.account-checkbox-item {
+  display: flex; /* Aligns the children (checkbox and label) in a row */
+  align-items: center; /* Centers the children vertically */
+  margin-bottom: 0.5rem; /* Space between each checkbox item */
+}
+
+.account-checkbox-input {
+  margin-right: 0.5rem; /* Space between the checkbox and the label */
+  cursor: pointer; /* Changes the mouse cursor to pointer when hovering over the checkbox */
+  /* Removes default styles for better control */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  height: 1.2em;
+  width: 1.2em;
+  border: 1px solid #333; /* Border for the custom checkbox */
+  border-radius: 3px; /* Rounded corners for the checkbox */
+  background-color: #fff; /* White background for the checkbox */
+}
+
+.account-checkbox-input:checked {
+  background-color: #4CAF50; /* Change the background color when checked */
+  border-color: #4CAF50; /* Match the border color with the background */
+}
+
+.account-checkbox-label {
+  display: flex; /* Ensures label text aligns with the checkbox */
+  align-items: center; /* Aligns label text vertically */
+  cursor: pointer; /* Indicates the label is clickable */
+}
+
+.confirm-selection-button {
+  background-color: #4CAF50; /* Green background color */
+  color: white; /* White text */
+  padding: 10px 20px; /* Padding inside the button */
+  border: none; /* No border */
+  border-radius: 4px; /* Rounded corners for the button */
+  cursor: pointer; /* Changes the mouse cursor to pointer when hovering over the button */
+  display: block; /* Display as block to take the full width */
+  width: auto; /* Auto width based on content and padding */
+  margin-top: 1rem; /* Space above the button */
+  margin-left: auto; /* Horizontally align the button to the right */
+  margin-right: auto; /* Horizontally align the button to the right */
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.confirm-selection-button:hover {
+  background-color: #45a049; /* Darker green background on hover */
+}

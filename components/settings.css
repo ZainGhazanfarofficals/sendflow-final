@@ -1,0 +1,93 @@
+/* Settings.css */
+
+.settings-container {
+  background-color: #ffffff;
+}
+
+.settings-content {
+  padding: 2rem 1.5rem;
+  margin: auto;
+  max-width: 1280px; /* Adjust this value as needed */
+}
+
+.settings-title {
+  font-size: 1.875rem; /* 30px */
+  font-weight: 600;
+  text-align: center;
+  color: #1f2937;
+  text-transform: capitalize;
+  margin-bottom: 1rem;
+}
+
+.settings-description {
+  max-width: 42rem;
+  margin: 1rem auto 1.5rem;
+  text-align: center;
+  color: #6b7280;
+}
+
+/* Settings.css */
+
+.pricing-plans {
+  display: flex;
+  justify-content: space-between; /* Distribute space between items */
+  align-items: flex-start; /* Align items to the start of the container */
+  flex-wrap: nowrap; /* Prevent wrapping */
+  gap: 2rem; /* Space between items */
+  margin-top: 1.5rem;
+}
+
+.plan-card {
+  flex: 0 1 calc(33.333% - 2rem); /* Adjust the calculation for the gap size */
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  height: auto; /* Or set a fixed height */
+}
+
+/* Other styles remain unchanged */
+
+
+.plan-card.highlighted {
+  background-color: #2563eb;
+  color: #ffffff; /* Ensures text is white on blue background */
+}
+
+.plan-title {
+  font-weight: 500;
+  color: inherit; /* Inherits from parent, so it will be white on blue background */
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.plan-price {
+  font-size: 3rem;
+  font-weight: 600;
+  color: inherit; /* Inherits from parent */
+  text-transform: uppercase;
+}
+
+.plan-duration {
+  font-weight: 500;
+  color: inherit; /* Inherits from parent */
+  margin-bottom: 2.5rem;
+}
+
+.plan-button {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: #ffffff; /* Button background color */
+  color: #2563eb; /* Button text color */
+  border: 2px solid #2563eb; /* Button border color */
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 300ms ease-in-out;
+}
+
+.plan-button:hover {
+  background-color: #e5e5e5; /* Light grey background on hover */
+  color: #2563eb; /* Keep the text color blue on hover */
+}

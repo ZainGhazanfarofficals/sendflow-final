@@ -1,0 +1,37 @@
+/* SuccessModal.css */
+
+.successModalBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(75, 85, 99, 0.5); /* bg-gray-800 bg-opacity-50 */
+    z-index: 50;
+  }
+  
+  .successModalContent {
+    background-color: #ffffff; /* bg-white */
+    padding: 1rem; /* p-4 */
+    border-radius: 0.5rem; /* rounded-lg */
+  }
+  
+  .successModalMessage {
+    color: #10b981; /* text-green-500 */
+  }
+  
+  .successModalCloseButton {
+    background-color: #10b981; /* bg-green-500 */
+    color: #ffffff; /* text-white */
+    padding: 0.25rem 0.75rem; /* px-3 py-1 */
+    border-radius: 0.25rem; /* rounded */
+    cursor: pointer;
+  }
+  
+  .successModalCloseButton:hover {
+    background-color: #059669; /* bg-green-600 for hover effect */
+  }
+  

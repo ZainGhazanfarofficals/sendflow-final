@@ -1,0 +1,113 @@
+/* Mailbox.css */
+
+.grid-center {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  background-color: #f3f4f6; /* A light grey background */
+}
+
+.form-container {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 2rem;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  width: 100%; /* Adjust width as per your design requirements */
+  max-width: 500px; /* Maximum width of the form */
+  margin: auto; /* Centers the form in the viewport */
+}
+
+.form-header {
+  font-size: 2rem; /* Bigger font size for the form header */
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #111827; /* Darker text for better contrast */
+}
+
+.input-field {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  width: calc(100% - 2rem); /* Adjust width to factor in padding */
+}
+
+.back-button {
+  border-radius: 0.5rem;
+  background-color: #000000;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+.back-button:hover {
+  background-color: #1d1d1d; /* Tailwind's bg-green-700 */
+}
+
+.error-message-box {
+  background-color: #f87171; /* Tailwind's bg-red-400 */
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  margin-top: 1rem;
+}
+
+.link {
+  color: #1d4ed8; /* Tailwind's text-blue-700 */
+  font-size: 1rem;
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.link span {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Additional styling for the list of replies */
+.reply-list {
+  list-style-type: none; /* Removes default list styling */
+  padding: 0; /* Removes default padding */
+}
+
+.reply-item {
+  background-color: #ffffff; /* bg-white */
+  border: 1px solid #e5e7eb; /* border-gray-300 */
+  border-radius: 0.375rem; /* rounded-md */
+  padding: 1rem;
+  margin-bottom: 1rem; /* Space between reply items */
+}
+
+/* Styling for individual reply content */
+.reply-content {
+  padding-left: 1rem; /* Additional padding for content */
+  margin-top: 0.5rem; /* Space above the content */
+  border-left: 4px solid #10b981; /* A green left border for emphasis */
+    overflow-wrap: break-word; /* This will break long words to prevent overflow */
+  word-break: break-word;
+}
+
+/* Styling for links within the reply content */
+.reply-content a {
+  color: #3b82f6; /* bg-blue-500 */
+  text-decoration: underline; /* Underlines links */
+}
+
+.reply-content a:hover {
+  text-decoration: none; /* Removes underline on hover */
+}
+
+.read-more-button {
+  background-color: transparent;
+  color: #2563eb; /* text-blue-600 */
+  padding: 0.5rem 0; /* px-6 py-3 */
+  border: none; /* No border */
+  text-align: left; /* Aligns text to the left */
+  margin-top: 1rem; /* Space above the button */
+  cursor: pointer;
+}
+
+.read-more-button:hover {
+  text-decoration: underline; /* Underlines text on hover */
+}

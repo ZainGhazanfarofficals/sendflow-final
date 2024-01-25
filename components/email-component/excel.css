@@ -1,0 +1,49 @@
+/* ExcelImport.css */
+.excel-import-container {
+    border: 1px solid #e5e7eb; /* This is the color for Tailwind's 'border' class */
+    border-radius: 0.25rem; /* This is the value for Tailwind's 'rounded' class */
+    padding: 1rem; /* This is the value for Tailwind's 'p-4' class */
+    background-color: #ffffff; /* This is the color for Tailwind's 'bg-white' class */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); 
+  }
+  
+  .input-file-hidden {
+    display: none;
+  }
+  
+  .label-block {
+    display: block;
+    margin-bottom: 0.5rem; /* This is the value for Tailwind's 'mb-2' class */
+  }
+  
+  .input-file {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem; /* This is the value for Tailwind's 'py-1 px-2' class */
+    margin-top: 0.25rem; /* This is the value for Tailwind's 'mt-1' class */
+  }
+  
+  .table {
+    border-collapse: collapse;
+    margin-top: 1rem; /* This is the value for Tailwind's 'mt-4' class */
+  }
+  
+  .th {
+    border: 1px solid #e5e7eb;
+    padding: 0.5rem; /* This is the value for Tailwind's 'p-2' class */
+    font-weight: bold; /* This is the value for Tailwind's 'font-bold' class */
+  }
+  
+  .td {
+    border: 1px solid #e5e7eb;
+    padding: 0.5rem; /* Same as 'p-2' class */
+  }
+  
+  .tr-border {
+    border: 1px solid #e5e7eb; /* This is the color for Tailwind's 'border' class */
+  }
+  
+  .td-border {
+    border: 1px solid #e5e7eb;
+    padding: 0.5rem; /* This is the value for Tailwind's 'p-2' class */
+  }

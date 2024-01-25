@@ -1,0 +1,63 @@
+/* CreateCampaign.css */
+.create-campaign-container {
+    height: auto;
+    width: 100%;
+    max-width: 120vh;
+  }
+  
+  .tab-buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    margin-left: 8rem; /* Adjusted from ml-40 */
+  }
+  
+  .tab-button {
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: #ffffff;
+    cursor: pointer;
+  }
+  
+  .tab-button-active {
+    background-color: #3b82f6; /* Tailwind's bg-blue-500 */
+  }
+  
+  .tab-button-inactive {
+    background-color: #000000; /* Tailwind's bg-black */
+  }
+  
+  .tab-content {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    margin-left: 10rem; /* Adjusted from ml-40 */
+  }
+  
+  .send-button-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    margin-left: 10rem; /* Adjusted from ml-40 */
+  }
+  
+  .send-button {
+    border-radius: 0.5rem;
+    background-color: #000000; /* Tailwind's bg-black */
+    color: #ffffff;
+    padding: 0.75rem 5rem; /* Adjusted from py-3 px-20 */
+    cursor: pointer;
+  }
+  
+  .send-button:hover {
+    background-color: #4b5563; /* Tailwind's hover:bg-gray-800 */
+  }
+  
+  .error-message {
+    text-align: center;
+    color: red;
+  }
+  

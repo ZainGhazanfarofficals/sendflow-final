@@ -1,0 +1,77 @@
+/* LoginForm.css */
+.login-container {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+}
+
+.login-box {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 2rem; /* Increased padding for more height and width */
+  border-radius: 0.5rem;
+  border-top: 4px solid #38a169; /* Tailwind's border-green-400 */
+  width: auto; /* Adjust width as needed */
+  min-height: 20rem; /* New minimum height */
+  min-width: 20rem; /* New minimum width */
+}
+
+.login-title {
+  font-size: 1.25rem; /* Tailwind's text-xl */
+  font-weight: bold;
+  margin: 1rem 0; /* Tailwind's my-4 */
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; /* Tailwind's gap-3 */
+}
+
+.input {
+  padding: 0.5rem; /* Adjust padding as needed */
+  margin-bottom: 0.5rem; /* Space below each input */
+  border: 1px solid #cbd5e1; /* Tailwind's border-gray-300 */
+  border-radius: 0.375rem; /* Tailwind's rounded-md */
+}
+
+.button-login {
+  background-color: #1cac5f; /* Tailwind's bg-green-600 */
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.5rem 1.5rem; /* Tailwind's px-6 py-2 */
+  border: none; /* Removed border */
+  border-radius: 0.375rem; /* Tailwind's rounded-md */
+}
+
+.button-login:hover {
+  background-color: #3ac078;  /* Tailwind's bg-green-600 */
+}
+
+.error-message {
+  color: white;
+  padding: 0.25rem 0.75rem; /* Tailwind's py-1 px-3 */
+  border-radius: 0.375rem; /* Tailwind's rounded-md */
+  margin-top: 0.5rem; /* Tailwind's mt-2 */
+}
+
+.text-small {
+  font-size: 0.875rem; /* Tailwind's text-sm */
+  margin-top: 0.75rem; /* Tailwind's mt-3 */
+  text-align: center; /* Centered text */
+  color: black; /* Changed color to black */
+}
+
+.link-register {
+  color: black; /* Changed color to black */
+  text-decoration: none; /* Remove underline */
+}
+
+.link-register span {
+  text-decoration: underline; /* Underline 'Register' only */
+}
+
+.link-register:hover {
+  cursor: pointer;
+  /* Optionally add a hover effect */
+}

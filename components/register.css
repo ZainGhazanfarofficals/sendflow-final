@@ -1,0 +1,70 @@
+/* RegisterForm.css */
+
+.grid-center {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+}
+
+.form-container {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 2rem; /* Increased padding for more height and width */
+  border-radius: 0.5rem;
+  border-top: 4px solid #22c55e; /* Border color similar to the button */
+  width: auto; /* Adjust width as needed */
+  min-height: 20rem; /* New minimum height */
+  min-width: 20rem; /* New minimum width */
+}
+
+.form-header {
+  font-size: 1.25rem; /* Tailwind's text-xl */
+  font-weight: bold;
+  margin: 1rem 0; /* Tailwind's my-4 */
+}
+
+.input-field {
+  padding: 0.5rem; /* Adjust padding as needed */
+  margin-bottom: 0.75rem; /* Space below each input */
+  border: 1px solid #cbd5e1; /* Tailwind's border-gray-300 */
+  border-radius: 0.375rem; /* Tailwind's rounded-md */
+}
+
+.button {
+  background-color: #16a34a; /* Tailwind's bg-green-600 */
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.75rem 1.5rem; /* Tailwind's px-6 py-3 */
+  border: none; /* Removed border */
+  border-radius: 0.375rem; /* Tailwind's rounded */
+}
+
+.button:hover {
+  background-color: #15803d; /* Tailwind's bg-green-700 */
+}
+
+.error-message-box {
+  color: white;
+  padding: 0.25rem 0.75rem; /* Tailwind's py-1 px-3 */
+  border-radius: 0.375rem; /* Tailwind's rounded-md */
+  margin-top: 0.5rem; /* Tailwind's mt-2 */
+}
+
+.link {
+  margin-top: 0.75rem; /* Tailwind's mt-3 */
+  text-align: center; /* Center the text */
+  font-size: 0.875rem; /* Tailwind's text-sm */
+  color: black; /* Changed color to black */
+}
+
+.link span {
+  text-decoration: underline; /* Keep underline on 'Login' */
+  cursor: pointer; /* Ensure it's clear this is a clickable link */
+}
+
+.form {
+  display: flex;
+  flex-direction: column; /* This ensures form elements stack vertically */
+  gap: 1rem; /* Adjust this value for space between form elements */
+  width: 100%; /* You can adjust width or set max-width as needed */
+}

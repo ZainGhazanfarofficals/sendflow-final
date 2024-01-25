@@ -1,0 +1,106 @@
+/* Navbar.css */
+.navbar {
+    background-color: white;
+    position: fixed;
+    width: 100%;
+    z-index: 20;
+    top: 0;
+    left: 0;
+    border-bottom: 1px solid #e2e8f0; /* Border color */
+  }
+  
+  .navbar-container {
+    max-width: 1280px; /* Screen-xl */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem; /* p-4 */
+    margin: auto;
+  }
+  
+  .logo-container {
+    cursor: pointer;
+  }
+  
+  .logo-text {
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: 600; /* font-semibold */
+  }
+  
+  .sign-out-button {
+    background-color: #1e293b; /* bg-slate-900 */
+    color: white;
+    padding: 0.5rem 1.5rem; /* px-6 py-2 */
+    border-radius: 0.375rem; /* rounded-md */
+    cursor: pointer;
+  }
+  
+  .sign-out-button:hover {
+    background-color: #293344; /* bg-slate-900 */
+    color: white;
+    padding: 0.5rem 1.5rem; /* px-6 py-2 */
+    border-radius: 0.375rem; /* rounded-md */
+    cursor: pointer;
+    font-weight: 'bold' 
+  }
+  
+  .user-image {
+    border-radius: 9999px; /* rounded-full */
+  }
+  
+  .user-name {
+    font-weight: 700; /* font-bold */
+    text-align: center;
+  }
+  
+  .menu-list {
+    display: none; /* Hidden by default, shown in md */
+    flex-direction: column;
+    padding: 1rem; /* p-4 */
+    margin-top: 1rem; /* mt-4 */
+    font-weight: 500; /* font-medium */
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem; /* rounded-lg */
+    background-color: #f9fafb; /* bg-gray-50 */
+  }
+  
+  .menu-list-item {
+    padding: 0.5rem 1rem; /* py-2 pl-3 pr-4 */
+    color: #1e293b; /* text-primary */
+  }
+  
+  .get-started-button {
+    margin-bottom: 1.5rem; /* Tailwind's mb-6 */
+    margin-left: auto;
+    border-radius: 0.5rem; /* Tailwind's rounded-lg */
+    background-color: #000000;
+    color: #ffffff;
+    padding: 0.5rem 1.5rem; /* Tailwind's py-2 px-6 */
+    cursor: pointer;
+    font: bold;
+  }
+  .get-started-button:hover {
+    background-color: #4b5563; /* Tailwind's hover:bg-gray-800 */
+  }
+  
+  /* For the unordered list */
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+
+/* For the div with session logic */
+.session-container {
+  display: flex;
+}
+
+
+/* For the inner div with justify-around and gap */
+.session-actions {
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+}

@@ -1,0 +1,39 @@
+/* Campaigns.css */
+.campaign-list-item {
+    border: 1px solid #e5e7eb;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .campaign-details {
+    font-weight: bold;
+    font-size: 1.25rem; /* Tailwind's text-xl */
+  }
+  
+  .campaign-snippet {
+    font-size: 0.875rem; /* Tailwind's text-sm */
+  }
+  
+  .campaign-actions {
+    display: flex;
+    gap: 0.5rem; /* Tailwind's gap-2 */
+  }
+  
+  .create-campaign-button {
+    margin-bottom: 1.5rem; /* Tailwind's mb-6 */
+    margin-left: auto;
+    border-radius: 0.5rem; /* Tailwind's rounded-lg */
+    background-color: #000000;
+    color: #ffffff;
+    padding: 0.5rem 1.5rem; /* Tailwind's py-2 px-6 */
+    cursor: pointer;
+    font: bold;
+  }
+  
+  .create-campaign-button:hover {
+    background-color: #4b5563; /* Tailwind's hover:bg-gray-800 */
+  }
+  

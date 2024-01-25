@@ -1,0 +1,86 @@
+/* HandlingData.css */
+.handling-data-container {
+    height: auto;
+    width: 100%;
+    max-width: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+    background-color: #ffffff;
+
+  }
+  
+  .handling-data-card {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, .2), 0 20px 10px -5px rgba(0, 0, 0, .04);
+    border-radius: 0.5rem;
+    padding: 2.5rem;
+  }
+  
+  .label-block {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-weight: bold;
+  }
+  
+  .input-full {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    outline: none;
+  }
+  
+  .input-full:focus {
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 2px #bfdbfe; /* This simulates the 'ring' effect */
+  }
+  
+  
+  .text-link {
+    position: relative;
+    top: 50%;
+    right: 0.75rem;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #3b82f6;
+    text-decoration: none;
+  }
+  
+  .text-link:hover {
+    color: #2563eb;
+  }
+  
+  .button-setup {
+    border-radius: 0.5rem;
+    background-color: #000000;
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+  
+  .button-setup:hover {
+    background-color: #4b5563;
+  }
+  
+  .error-message {
+    color: red;
+  }
+  
+  .mb-6 {
+    margin-bottom: 1.5rem;
+  }
+  
+  .mb-4 {
+    margin-bottom: 1rem;
+  }
+  
+  .mr-2 {
+    margin-right: 0.5rem;
+  }
+  
+  .flex-1 {
+    flex: 1;
+  }
+  
