@@ -37,7 +37,7 @@ const ExcelImport = ({ onTableDataChange,tableData:tableprop, file }) => {
   const ReadExcel = async (filename) => {
     try {
       console.log(filename)
-      const apiUrl = (`http://localhost:3000/api/getExcelFile?filename=${encodeURIComponent(filename)}`);
+      const apiUrl = (`${process.env.NEXT_PUBLIC_URL}api/getExcelFile?filename=${encodeURIComponent(filename)}`);
       const response = await fetch(apiUrl, {
         method: "GET",
       });

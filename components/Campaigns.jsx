@@ -25,7 +25,7 @@ export default function Campaigns({ setMainTitle }) {
   const fetchData = async () => {
     try {
   //    const apiUrl = `https://snowflow.devsassemble.com/api/campaign?variableName=${encodeURIComponent(mail)}`;
-  const apiUrl = `http://localhost:3000/api/campaign?variableName=${encodeURIComponent(mail)}`;
+  const apiUrl = `${process.env.NEXT_PUBLIC_URL}api/campaign?variableName=${encodeURIComponent(mail)}`;
       const response = await fetch(apiUrl, {
         method: "GET",
       });
