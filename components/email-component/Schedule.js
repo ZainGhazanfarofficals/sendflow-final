@@ -32,34 +32,45 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule: propdate
   };
 
   const submitDate = () => {
-    // Create a Date object in local time, then convert to UTC
-    const selectedDateTime = new Date(selectedDate);
-    selectedDateTime.setHours(selectedHours, selectedMinutes, selectedSeconds);
-
-    // Convert to UTC
-    const utcDateTime = new Date(selectedDateTime.getTime() + selectedDateTime.getTimezoneOffset() * 60000);
-
-    // Check if the selected date and time are in the past
-    if (utcDateTime <= new Date()) {
-      setError('Cannot schedule Time in the past.');
+    // Create a Date object in local time with the selected date and time
+    const selectedDateTimeLocal = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate(),
+      selectedHours,
+      selectedMinutes,
+      selectedSeconds
+    );
+  
+    // Convert the selected date and time to UTC
+    const utcOffset = selectedDateTimeLocal.getTimezoneOffset() * 60000;
+    const selectedDateTimeUTC = new Date(selectedDateTimeLocal.getTime() - utcOffset);
+  
+    // Get the current UTC time
+    const currentDateTimeUTC = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000);
+  
+    // Check if the selected UTC date and time are in the past compared to current UTC time
+    if (selectedDateTimeUTC <= currentDateTimeUTC) {
+      setError('Cannot schedule time in the past.');
       setTimeout(() => {
         setError('');
       }, 2000);
       return;
     }
-
+  
     const dateInfoUTC = {
-      day: utcDateTime.getUTCDay(),
-      month: utcDateTime.getUTCMonth(),
-      date: utcDateTime.getUTCDate(),
-      hours: utcDateTime.getUTCHours(),
-      minutes: utcDateTime.getUTCMinutes(),
-      seconds: utcDateTime.getUTCSeconds(),
+      day: selectedDateTimeUTC.getUTCDay(),
+      month: selectedDateTimeUTC.getUTCMonth(),
+      date: selectedDateTimeUTC.getUTCDate(),
+      hours: selectedDateTimeUTC.getUTCHours(),
+      minutes: selectedDateTimeUTC.getUTCMinutes(),
+      seconds: selectedDateTimeUTC.getUTCSeconds(),
     };
-
+  
     setError('');
     takedateInfo(dateInfoUTC);
   };
+  
 
   return (
     <div className="calendar-container">
