@@ -46,11 +46,11 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule: propdate
     const utcOffset = selectedDateTimeLocal.getTimezoneOffset() * 60000;
     const selectedDateTimeUTC = new Date(selectedDateTimeLocal.getTime() - utcOffset);
   
-    // Get the current UTC time
-    const currentDateTimeUTC = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000);
+    // Get the current time in UTC
+    const currentDateTimeUTC = new Date(Date.now() - new Date().getTimezoneOffset() * 60000);
   
-    // Check if the selected UTC date and time are in the past compared to current UTC time
-    if (selectedDateTimeUTC <= currentDateTimeUTC) {
+    // Check if the selected UTC date and time are in the past compared to the current UTC time
+    if (selectedDateTimeUTC < currentDateTimeUTC) {
       setError('Cannot schedule time in the past.');
       setTimeout(() => {
         setError('');
