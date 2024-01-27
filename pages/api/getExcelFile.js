@@ -11,7 +11,7 @@ export default async (req, res) => {
       res.status(400).json({ message: 'No filename provided.' });
       return;
     }
-
+   console.log(filename);
     // Construct the Cloudinary URL for the file
     const cloudinaryUrl = `https://res.cloudinary.com/dpkkaacjk/raw/upload/uploads/${filename}`;
 
