@@ -5,7 +5,6 @@ import './schedule.css';
 
 export default function CalendarGfg({ takedateInfo, dateInfo, schedule: propdate }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [currentTime, setCurrentTime] = useState(new Date());
   const [selectedHours, setSelectedHours] = useState(dateInfo?.hours || 0);
   const [selectedMinutes, setSelectedMinutes] = useState(dateInfo?.minutes || 0);
   const [selectedSeconds, setSelectedSeconds] = useState(dateInfo?.seconds || 0);
@@ -19,13 +18,6 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule: propdate
       setSelectedSeconds(data.seconds);
     }
   }, [propdate]);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(intervalId);
-  }, []);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -41,17 +33,14 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule: propdate
       selectedMinutes,
       selectedSeconds
     );
-  
-    // Convert the selected date and time to UTC by adjusting for the local timezone offset
+
+    // Convert the selected date and time to UTC
     const utcOffset = selectedDateTimeLocal.getTimezoneOffset() * 60000;
     const selectedDateTimeUTC = new Date(selectedDateTimeLocal.getTime() - utcOffset);
-  
-    // Ensure that the UTC conversion does not change the calendar date
-    selectedDateTimeUTC.setUTCDate(selectedDateTimeLocal.getDate());
-  
+
     // Get the current UTC time for comparison
     const currentUTC = new Date();
-  
+
     // Compare the selected UTC date and time with the current UTC time
     if (selectedDateTimeUTC < currentUTC) {
       setError('Cannot schedule time in the past.');
@@ -60,7 +49,7 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule: propdate
       }, 3000);
       return;
     }
-  
+
     const dateInfoUTC = {
       day: selectedDateTimeUTC.getUTCDay(),
       month: selectedDateTimeUTC.getUTCMonth(),
@@ -69,19 +58,14 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule: propdate
       minutes: selectedDateTimeUTC.getUTCMinutes(),
       seconds: selectedDateTimeUTC.getUTCSeconds(),
     };
-  
+
     setError('');
     takedateInfo(dateInfoUTC);
   };
-  
-  
-  
-  
 
   return (
     <div className="calendar-container">
       <div className="flex-container">
-        {/* Hour, Minute, and Second selectors */}
         <div>
           <label className="select-label">Select Hour:</label>
           <select
