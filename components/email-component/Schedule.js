@@ -33,30 +33,28 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule: propdate
   }, []);
 
   const sendEmailAtCurrentTime = () => {
-    // Get the current UTC date and time
     const currentDateTimeUTC = new Date();
-
-    // You can add some buffer time here if needed, e.g., 1 minute
-    currentDateTimeUTC.setUTCMinutes(currentDateTimeUTC.getUTCMinutes() + 1);
-
+  
+    // Define arrays to map month and day numbers to their names
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  
     const currentDateTimeInfo = {
-      day: currentDateTimeUTC.getUTCDay(),
-      month: currentDateTimeUTC.getUTCMonth(),
+      day: days[currentDateTimeUTC.getUTCDay()],      // Get the name of the day
+      month: months[currentDateTimeUTC.getUTCMonth()], // Get the name of the month
       date: currentDateTimeUTC.getUTCDate(),
       hours: currentDateTimeUTC.getUTCHours(),
       minutes: currentDateTimeUTC.getUTCMinutes(),
       seconds: currentDateTimeUTC.getUTCSeconds(),
     };
-
-    // Update the state with the current UTC time
+  
     setSelectedHours(currentDateTimeInfo.hours);
     setSelectedMinutes(currentDateTimeInfo.minutes);
     setSelectedSeconds(currentDateTimeInfo.seconds);
-
-    // Pass the current UTC time information
+  
     takedateInfo(currentDateTimeInfo);
   };
-
+  
 
   const submitDate = () => {
     // Create a UTC Date object directly from the selected date and UTC time parts
