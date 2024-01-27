@@ -44,7 +44,7 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule: propdate
       month: months[currentDateTimeUTC.getUTCMonth()], // Get the name of the month
       date: currentDateTimeUTC.getUTCDate(),
       hours: currentDateTimeUTC.getUTCHours(),
-      minutes: currentDateTimeUTC.getUTCMinutes(),
+      minutes: currentDateTimeUTC.getUTCMinutes()+2,
       seconds: currentDateTimeUTC.getUTCSeconds(),
     };
   
