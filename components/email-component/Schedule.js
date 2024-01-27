@@ -9,6 +9,7 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule: propdate
   const [selectedMinutes, setSelectedMinutes] = useState(dateInfo?.minutes || 0);
   const [selectedSeconds, setSelectedSeconds] = useState(dateInfo?.seconds || 0);
   const [error, setError] = useState('');
+  const [currentUTCTime, setCurrentUTCTime] = useState(new Date().toUTCString());
 
   useEffect(() => {
     if (propdate) {
@@ -18,6 +19,13 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule: propdate
       setSelectedSeconds(data.seconds);
     }
   }, [propdate]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentUTCTime(new Date().toUTCString());
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -63,9 +71,11 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule: propdate
     takedateInfo(dateInfoUTC);
   };
 
+
   return (
     <div className="calendar-container">
       <div className="flex-container">
+        {/* Hour, Minute, and Second selectors */}
         <div>
           <label className="select-label">Select Hour:</label>
           <select
@@ -118,8 +128,8 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule: propdate
         />
       </div>
 
-      <strong>Current Time (UTC):</strong>
-      <div>{new Date().toISOString()}</div>
+      <strong>Current Time (GMT+0000):</strong>
+      <div>{currentUTCTime}</div>
 
       <div>
         <button
