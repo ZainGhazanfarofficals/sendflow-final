@@ -8,31 +8,42 @@ cloudinary.config({
   api_secret: 'uLSlA65oNFr-jqWLGYmPPVElLT0',
 });
 
-const generateFilename = (req, file, cb) => {
-  const filename = `${Date.now()}-${file.originalname}`;
-  req.generatedFilename = filename;
-  cb(null, filename);
-};
-
+// Create a storage engine for multer to use with Cloudinary
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'uploads',
     resource_type: 'raw',
-    public_id: (req, file) => req.generatedFilename,
+    public_id: (req, file) => `${Date.now()}-${file.originalname}`,
   },
 });
 
 const upload = multer({ storage });
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 const uploadExcelMiddleware = upload.single('ExcelFile');
 
-export default async (req, res) => {
-  uploadExcelMiddleware(req, res, async (err) => {
+const uploadExcelAPI = (req, res) => {
+  uploadExcelMiddleware(req, res, (err) => {
     if (err) {
-      console.error(err);
+      console.error('Upload Error:', err);
       return res.status(500).json({ error: 'Internal Server Error', details: err.message });
     }
-    const filename = req.generatedFilename;
-    res.status(200).json({ success: true, filename });
+
+    // Using Cloudinary's response to get the filename
+    if (req.file && req.file.path) {
+      const filename = req.file.path;  // This is the file URL/path provided by Cloudinary
+      console.log('Uploaded Filename:', filename);
+      res.status(200).json({ success: true, filename });
+    } else {
+      res.status(500).json({ error: 'File upload failed', details: 'No file info received' });
+    }
   });
 };
+
+export default uploadExcelAPI;
