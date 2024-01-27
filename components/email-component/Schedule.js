@@ -42,14 +42,15 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule: propdate
       selectedSeconds
     );
   
-    // Convert local date-time to UTC
-    const selectedDateTimeUTC = new Date(selectedDateTimeLocal.getTime() + selectedDateTimeLocal.getTimezoneOffset() * 60000);
+    // Convert the selected date-time to UTC
+    const utcOffset = selectedDateTimeLocal.getTimezoneOffset() * 60000;
+    const selectedDateTimeUTC = new Date(selectedDateTimeLocal.getTime() - utcOffset);
   
-    // Get the current UTC time
-    const currentUTC = new Date();
+    // Get the current UTC time for comparison
+    const currentDateTimeUTC = new Date();
   
-    // Compare the UTC converted selected date-time with the current UTC time
-    if (selectedDateTimeUTC < currentUTC) {
+    // Check if the selected UTC date and time are in the past compared to the current UTC time
+    if (selectedDateTimeUTC < currentDateTimeUTC) {
       setError('Cannot schedule time in the past.');
       setTimeout(() => {
         setError('');
@@ -69,6 +70,7 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule: propdate
     setError('');
     takedateInfo(dateInfoUTC);
   };
+  
   
   
   
