@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
-export default function CalendarGfg({ takedateInfo, dateInfo, schedule:propdate }) {
+export default function CalendarGfg({ takedateInfo, dateInfo, schedule: propdate }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentTime, setCurrentTime] = useState(new Date());
   const [selectedHours, setSelectedHours] = useState(dateInfo?.hours || 0);
@@ -33,65 +33,73 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule:propdate 
   }, []);
 
   const sendEmailAtCurrentTime = () => {
-    // Get the current date and time in UTC
-    const currentDateTime = new Date();
-    currentDateTime.setUTCMinutes(currentDateTime.getUTCMinutes() + 1);
-  
+    // Get the current UTC date and time
+    const currentDateTimeUTC = new Date();
+
+    // You can add some buffer time here if needed, e.g., 1 minute
+    currentDateTimeUTC.setUTCMinutes(currentDateTimeUTC.getUTCMinutes() + 1);
+
     const currentDateTimeInfo = {
-      day: currentDateTime.getUTCDay(),
-      month: currentDateTime.getUTCMonth(),
-      date: currentDateTime.getUTCDate(),
-      hours: currentDateTime.getUTCHours(),
-      minutes: currentDateTime.getUTCMinutes(),
-      seconds: currentDateTime.getUTCSeconds(),
+      day: currentDateTimeUTC.getUTCDay(),
+      month: currentDateTimeUTC.getUTCMonth(),
+      date: currentDateTimeUTC.getUTCDate(),
+      hours: currentDateTimeUTC.getUTCHours(),
+      minutes: currentDateTimeUTC.getUTCMinutes(),
+      seconds: currentDateTimeUTC.getUTCSeconds(),
     };
-  
-    // Set the selected hours, minutes, and seconds to the current UTC time
+
+    // Update the state with the current UTC time
     setSelectedHours(currentDateTimeInfo.hours);
     setSelectedMinutes(currentDateTimeInfo.minutes);
     setSelectedSeconds(currentDateTimeInfo.seconds);
-  
+
+    // Pass the current UTC time information
     takedateInfo(currentDateTimeInfo);
   };
-  
+
 
   const submitDate = () => {
     // Create a UTC Date object directly from the selected date and UTC time parts
-    const selectedDateTimeUTC = new Date(Date.UTC(
-      selectedDate.getFullYear(),
-      selectedDate.getMonth(),
-      selectedDate.getDate(),
-      selectedHours,
-      selectedMinutes,
-      selectedSeconds
-    ));
-  
-    // Get the current UTC time for comparison
-    const currentUTC = new Date();
-  
-    // Check if the selected UTC date and time are in the past compared to current UTC time
-    if (selectedDateTimeUTC < currentUTC) {
-      setError('Cannot schedule time in the past.');
-      setTimeout(() => {
-        setError('');
-      }, 2000);
-      return;
+    if (selectedHours === 0 && selectedMinutes === 0 && selectedSeconds === 0) {
+      sendEmailAtCurrentTime();
     }
-  
-    // Format the selected date info in UTC
-    const selectedDateInfoUTC = {
-      day: selectedDateTimeUTC.getUTCDay(),
-      month: selectedDateTimeUTC.getUTCMonth(),
-      date: selectedDateTimeUTC.getUTCDate(),
-      hours: selectedDateTimeUTC.getUTCHours(),
-      minutes: selectedDateTimeUTC.getUTCMinutes(),
-      seconds: selectedDateTimeUTC.getUTCSeconds(),
-    };
-  
-    setError('');
-    takedateInfo(selectedDateInfoUTC);
+    else {
+      const selectedDateTimeUTC = new Date(Date.UTC(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        selectedDate.getDate(),
+        selectedHours,
+        selectedMinutes,
+        selectedSeconds
+      ));
+
+      // Get the current UTC time for comparison
+      const currentUTC = new Date();
+
+      // Check if the selected UTC date and time are in the past compared to current UTC time
+      if (selectedDateTimeUTC < currentUTC) {
+        setError('Cannot schedule time in the past.');
+        setTimeout(() => {
+          setError('');
+        }, 2000);
+        return;
+      }
+
+      // Format the selected date info in UTC
+      const selectedDateInfoUTC = {
+        day: selectedDateTimeUTC.getUTCDay(),
+        month: selectedDateTimeUTC.getUTCMonth(),
+        date: selectedDateTimeUTC.getUTCDate(),
+        hours: selectedDateTimeUTC.getUTCHours(),
+        minutes: selectedDateTimeUTC.getUTCMinutes(),
+        seconds: selectedDateTimeUTC.getUTCSeconds(),
+      };
+
+      setError('');
+      takedateInfo(selectedDateInfoUTC);
+    }
   };
-  
+
 
   const hourOptions = Array.from({ length: 24 }, (_, i) => i);
   const minuteOptions = Array.from({ length: 60 }, (_, i) => i);
