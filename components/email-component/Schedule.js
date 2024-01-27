@@ -1,10 +1,9 @@
-"use client"
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import './schedule.css'
+import './schedule.css';
 
-export default function CalendarGfg({ takedateInfo, dateInfo, schedule:propdate }) {
+export default function CalendarGfg({ takedateInfo, dateInfo, schedule: propdate }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentTime, setCurrentTime] = useState(new Date());
   const [selectedHours, setSelectedHours] = useState(dateInfo?.hours || 0);
@@ -12,92 +11,36 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule:propdate 
   const [selectedSeconds, setSelectedSeconds] = useState(dateInfo?.seconds || 0);
   const [error, setError] = useState('');
 
-
   useEffect(() => {
     if (propdate) {
       const data = JSON.parse(propdate);
-      console.log(data);
       setSelectedHours(data.hours);
       setSelectedMinutes(data.minutes);
       setSelectedSeconds(data.seconds);
     }
   }, [propdate]);
 
-
-
-  
-  const updateTime = () => {
-    setCurrentTime(new Date());
-  };
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
 
-  // Update the time every second
-  useEffect(() => {
-    const intervalId = setInterval(updateTime, 1000);
-
-    // Cleanup the interval on component unmount
-    return () => clearInterval(intervalId);
-  }, []);
-
-  
-  const sendEmailAtCurrentTime = () => {
-    const currentDateTime = new Date();
-    currentDateTime.setMinutes(currentDateTime.getMinutes() + 1);
-    const currentDateTimeInfo = {
-      day: currentDateTime.toLocaleDateString('en-US', { weekday: 'short' }),
-      month: currentDateTime.toLocaleDateString('en-US', { month: 'short' }),
-      date: currentDateTime.getDate(),
-      hours: currentDateTime.getHours(),
-      minutes: currentDateTime.getMinutes(),
-      seconds: currentDateTime.getSeconds(),
-      
-    };
-    setSelectedHours(currentDateTime.getHours());
-    setSelectedMinutes(currentDateTime.getMinutes());
-    setSelectedSeconds(currentDateTime.getSeconds());
-    takedateInfo(currentDateTimeInfo);
-  };
-
   const submitDate = () => {
-    if (
-      selectedHours === 0 &&
-      selectedMinutes === 0 &&
-      selectedSeconds === 0
-    ) 
-    {
-      // If no specific time is selected, send email at the current time
-      sendEmailAtCurrentTime();
-      
-    } 
-    
-    else {
-      // ... rest of your submitDate logic for scheduling
-      
-  
-    const selectedDateInfo = {
-      day: selectedDate.toLocaleDateString('en-US', { weekday: 'short' }),
-      month: selectedDate.toLocaleDateString('en-US', { month: 'short' }),
-      date: selectedDate.getDate(),
-      hours: selectedHours,
-      minutes: selectedMinutes,
-      seconds: selectedSeconds,
-    };
+    // Create a Date object in local time, then convert to UTC
+    const selectedDateTime = new Date(selectedDate);
+    selectedDateTime.setHours(selectedHours, selectedMinutes, selectedSeconds);
 
-    // Calculate the selected date and time as a JavaScript Date object
-    const selectedDateTime = new Date(
-      selectedDate.getFullYear(),
-      selectedDate.getMonth(),
-      selectedDate.getDate(),
-      selectedHours,
-      selectedMinutes,
-      selectedSeconds
-    );
+    // Convert to UTC
+    const utcDateTime = new Date(selectedDateTime.getTime() + selectedDateTime.getTimezoneOffset() * 60000);
 
     // Check if the selected date and time are in the past
-    if (selectedDateTime <= currentTime) {
+    if (utcDateTime <= new Date()) {
       setError('Cannot schedule Time in the past.');
       setTimeout(() => {
         setError('');
@@ -105,23 +48,23 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule:propdate 
       return;
     }
 
-    // Clear the error if it was previously set
+    const dateInfoUTC = {
+      day: utcDateTime.getUTCDay(),
+      month: utcDateTime.getUTCMonth(),
+      date: utcDateTime.getUTCDate(),
+      hours: utcDateTime.getUTCHours(),
+      minutes: utcDateTime.getUTCMinutes(),
+      seconds: utcDateTime.getUTCSeconds(),
+    };
+
     setError('');
-
-    
-    takedateInfo(selectedDateInfo);
-  
-    }
+    takedateInfo(dateInfoUTC);
   };
-
-
-  const hourOptions = Array.from({ length: 24 }, (_, i) => i);
-  const minuteOptions = Array.from({ length: 60 }, (_, i) => i);
-  const secondOptions = Array.from({ length: 60 }, (_, i) => i);
 
   return (
     <div className="calendar-container">
-    <div className="flex-container">
+      <div className="flex-container">
+        {/* Hour, Minute, and Second selectors */}
         <div>
           <label className="select-label">Select Hour:</label>
           <select
@@ -129,9 +72,9 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule:propdate 
             onChange={(e) => setSelectedHours(Number(e.target.value))}
             className="select-input"
           >
-            {hourOptions.map((hour) => (
-              <option key={hour} value={hour}>
-                {hour}
+            {Array.from({ length: 24 }, (_, i) => (
+              <option key={i} value={i}>
+                {i}
               </option>
             ))}
           </select>
@@ -143,9 +86,9 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule:propdate 
             onChange={(e) => setSelectedMinutes(Number(e.target.value))}
             className="select-input"
           >
-            {minuteOptions.map((minute) => (
-              <option key={minute} value={minute}>
-                {minute}
+            {Array.from({ length: 60 }, (_, i) => (
+              <option key={i} value={i}>
+                {i}
               </option>
             ))}
           </select>
@@ -157,9 +100,9 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule:propdate 
             onChange={(e) => setSelectedSeconds(Number(e.target.value))}
             className="select-input"
           >
-            {secondOptions.map((second) => (
-              <option key={second} value={second}>
-                {second}
+            {Array.from({ length: 60 }, (_, i) => (
+              <option key={i} value={i}>
+                {i}
               </option>
             ))}
           </select>
@@ -174,8 +117,8 @@ export default function CalendarGfg({ takedateInfo, dateInfo, schedule:propdate 
         />
       </div>
 
-      <strong >Current Time:</strong>
-      <div>{currentTime.toLocaleTimeString()}</div>
+      <strong>Current Time (UTC):</strong>
+      <div>{new Date().toISOString()}</div>
 
       <div>
         <button
