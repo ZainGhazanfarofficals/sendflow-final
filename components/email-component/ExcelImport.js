@@ -310,9 +310,10 @@ const ExcelImport = ({ onTableDataChange }) => {
         setError('An error occurred while uploading the file.');
       }
     } catch (error) {
-      console.error('Error uploading file:', error);
-      setError('An error occurred while uploading the file.');
-    }
+      const detailedError = error.response?.data?.error || error.message || 'An unknown error occurred while uploading the file.';
+      console.error('Error details:', detailedError);
+      setError(detailedError);
+    }    
   };
 
   return (
