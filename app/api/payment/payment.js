@@ -1,8 +1,10 @@
 // pages/api/payment.js
 
 import { getSession } from 'next-auth/react';
-import { stripe } from '../../utils/stripe'; // Initialize Stripe with your API keys
-import { createOrder } from '../../../models/orders';
+import Stripe from 'stripe';
+import prisma from '@/lib/prisma';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', { apiVersion: '2022-11-15' });
 
 export default async (req, res) => {
   if (req.method !== 'POST') {
@@ -19,15 +21,16 @@ export default async (req, res) => {
       payment_method_types: ['card'],
     });
 
-    // Save order details to MongoDB
-    const order = await createOrder({
-      userId: session?.user?.id,
-      amount: paymentIntent.amount,
-      paymentIntentId: paymentIntent.id,
-      // Add more order details as needed
+    // Save order details to PostgreSQL
+    const order = await prisma.order.create({
+      data: {
+        userId: session?.user?.id ?? null,
+        amount: paymentIntent.amount,
+        paymentIntentId: paymentIntent.id,
+      },
     });
 
-    res.status(200).json({ clientSecret: paymentIntent.client_secret, orderId: order._id });
+    res.status(200).json({ clientSecret: paymentIntent.client_secret, orderId: order.id });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Payment failed' });

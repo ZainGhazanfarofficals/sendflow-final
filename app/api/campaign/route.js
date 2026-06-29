@@ -1,26 +1,29 @@
 import { NextResponse } from 'next/server';
-import Campaign from '@/models/campaign';
-import { connectMongoDB } from '@/lib/mongodb';
+import prisma from '@/lib/prisma';
 
 export async function POST(req) {
 
   const { method } = req;
 
-  await connectMongoDB();
   console.log("POST Request Accepted");
 
-  
   if (method === 'POST') {
-    let campaignData = await req.json();
-    console.log(campaignData);
+    // Extract only the fields Prisma knows about and map `mail` -> `user`
+    const {
+      mail,
+      schedulingData,
+      ...rest
+    } = await req.json();
 
-    const schedulingDataString = JSON.stringify(campaignData.schedulingData);
-    campaignData.schedulingData = schedulingDataString;
-    const users = campaignData.mail;
-    campaignData.user = users;
+    const data = {
+      ...rest,
+      user: mail, // store the user identifier under the expected field
+      schedulingData: JSON.stringify(schedulingData),
+    };
+    console.log(data);
     
     try {
-      const campaign = await Campaign.create(campaignData);
+      const campaign = await prisma.campaign.create({ data });
       return NextResponse.json({ message: 'Campaign Created', campaign }, { status: 200 });
     } catch (error) {
       console.error('Error creating campaign:', error);
@@ -35,7 +38,6 @@ export async function POST(req) {
 
 export async function GET(req) {
   let {url} = await req;
-  await connectMongoDB();
 
   const urlParts = url.split('?');
   if (urlParts.length !== 2) {
@@ -48,7 +50,7 @@ console.log(mail);
     try {
 
       // Use the userEmail for filtering campaigns
-      const campaigns = await Campaign.find({ user: mail });
+      const campaigns = await prisma.campaign.findMany({ where: { user: mail } });
       console.log(campaigns);
       return NextResponse.json({ campaigns });
     } catch (error) {
@@ -60,8 +62,6 @@ console.log(mail);
 
 export async function DELETE(req) {
   const { method, url } = req;
-
-  await connectMongoDB();
 
   if (method === 'DELETE') {
     const urlParts = url.split('?');
@@ -79,7 +79,7 @@ export async function DELETE(req) {
 
     try {
       
-      await Campaign.findByIdAndDelete(id);
+      await prisma.campaign.delete({ where: { id } });
       return NextResponse.json({ message: 'Campaign deleted' }, { status: 200 });
     } catch (error) {
       console.error('Error deleting campaign:', error); // Log the error for debugging

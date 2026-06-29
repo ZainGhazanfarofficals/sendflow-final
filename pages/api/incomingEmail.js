@@ -1,10 +1,7 @@
 import { simpleParser } from 'mailparser';
 import Imap from 'imap';
-import Reply from "@/models/Reply"; // Replace with the correct path to your Reply model
-import { connectMongoDB } from '../../lib/mongodb';
+import prisma from '@/lib/prisma';
 import crypto from 'crypto';
-import Campaign from '@/models/campaign';
-import EmailTracking from '@/models/EmailTracking'; // Import your EmailTracking model
 import cron from 'node-cron';
 
 // Maintain a Set to store processed email message IDs
@@ -12,14 +9,15 @@ const processedEmails = new Set();
 let processingEmail = false; // Variable to track email processing
 
 export default async function incomingEmailHandler(req, res) {
-  // Connect to your MongoDB database (assuming `connectMongoDB` function handles this)
-  await connectMongoDB();
 
   try {
     // Retrieve email accounts and appPasswords from the Campaign model based on the req.query.mail (an array of email addresses)
     const { mail } = req.query;
-    console.log(mail)
-    const campaigns = await Campaign.find({ user: { $in: mail } });
+    const mailList = Array.isArray(mail) ? mail : [mail];
+    console.log(mailList);
+    const campaigns = await prisma.campaign.findMany({
+      where: { user: { in: mailList } },
+    });
 
 
     if (!campaigns || campaigns.length === 0) {
@@ -86,11 +84,13 @@ export default async function incomingEmailHandler(req, res) {
                     const recipientMatch = recipients.match(/<([^>]+)>/);
                     const recipientEmail = recipientMatch ? recipientMatch[1] : recipients;
 
-                    // Find the corresponding campaign in MongoDB using cleanedSubject and recipient's email
-                    const campaign = await Campaign.findOne({
-                      user: { $in: mail },
-                      subject: cleanedSubject,
-                      email: recipientEmail, // Assuming 'user' is the field in the Campaign model representing sender email
+                    // Find the corresponding campaign using cleanedSubject and recipient's email
+                    const campaign = await prisma.campaign.findFirst({
+                      where: {
+                        user: { in: mailList },
+                        subject: cleanedSubject,
+                        email: recipientEmail,
+                      },
                     });
                   
                     if (!campaign) {
@@ -99,7 +99,7 @@ export default async function incomingEmailHandler(req, res) {
                     }
                   
                     // Use the campaign._id as the campaignId
-                    const campId = campaign._id;
+                    const campId = campaign.id;
 
                     // Generate a unique identifier (content hash) for the email content
                     const contentHash = crypto
@@ -116,17 +116,22 @@ export default async function incomingEmailHandler(req, res) {
                         processedEmails.add(emailIdentifier);
                         console.log(processedEmails)
                       // If it doesn't exist, then store the reply in the database
-                      const reply = new Reply({ senderEmail, content, recipients, user: mail });
+                      const reply = await prisma.reply.create({
+                        data: {
+                          senderEmail,
+                          content,
+                          recipients,
+                          user: mailList.join(","),
+                        },
+                      });
                       try {
-                        await reply.save();
                         console.log(`Email reply saved to the database for ${email}.`);
                         
-                        // Update EmailTracking for the corresponding campaign
-                        await EmailTracking.findOneAndUpdate(
-                          { campid: campId },
-                          { $inc: { replies: 1 } },
-                          { new: true }
-                        );
+                        await prisma.emailTracking.upsert({
+                          where: { campid: campId },
+                          update: { replies: { increment: 1 } },
+                          create: { campid: campId, user: mailList[0] ?? "unknown", replies: 1, sent: 0, opens: 0 },
+                        });
                         
                       } catch (error) {
                         console.error(`Error saving email reply to the database for ${email}:`, error);
@@ -164,7 +169,7 @@ export default async function incomingEmailHandler(req, res) {
     if (req.method === 'GET') {
       try {
         // Retrieve replies for all specified email accounts
-        const replies = await Reply.find({ user: { $in: mail } });
+        const replies = await prisma.reply.findMany({ where: { user: { contains: mailList[0] ?? "" } } });
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(replies));
       } catch (error) {
@@ -182,5 +187,3 @@ export default async function incomingEmailHandler(req, res) {
     res.end(JSON.stringify({ error: 'Internal Server Error' }));
   }
 }
-
-cron.schedule('*/2 * * * *', () => incomingEmailHandler(req, res));

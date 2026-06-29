@@ -11,20 +11,19 @@ export const metadata = {
   description: "Marketing website",
 };
 
-const contentStyle = {
-  marginLeft: '250px', // Should match the width of the sidebar
-  padding: '16px',
-};
-
 export default async function RootLayout({ children }) {
-  
-      const session = await getServerSession(authOptions);
+  let session = null;
+  try {
+    session = await getServerSession(authOptions);
+  } catch (error) {
+    console.error("getServerSession error in RootLayout", error);
+  }
 
-  
+
   return (
     <html lang="en">
    
-      <body  className={inter.className}>
+      <body className={`${inter.className} min-h-screen bg-white text-slate-900 antialiased dark:bg-ink dark:text-textPrimary`}>
         <Navbar session={session}/>
         <AuthProvider>{children}</AuthProvider>
       </body>

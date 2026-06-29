@@ -1,15 +1,14 @@
-"use client"
-import React, { useState } from 'react';
-import HandlingData from 'components/email-component/HandlingData';
-import ExcelImport from 'components/email-component/ExcelImport';
-import Schedule from 'components/email-component/Schedule'
+"use client";
+import React, { useState } from "react";
+import HandlingData from "components/email-component/HandlingData";
+import ExcelImport from "components/email-component/ExcelImport";
+import Schedule from "components/email-component/Schedule";
 import SuccessModal from "components/email-component/SuccessModal";
 import FailedModal from "components/email-component/FailedModal";
-import SelectedAccount from 'components/email-component/SelectedAccount';
+import SelectedAccount from "components/email-component/SelectedAccount";
 import axios from "axios";
-import Analytics from 'components/email-component/Analytics';
-import { useSession } from 'next-auth/react';
-import './createcampaign.css'
+import Analytics from "components/email-component/Analytics";
+import { useSession } from "next-auth/react";
 
 function CreateCampaign({
   email,
@@ -38,7 +37,7 @@ function CreateCampaign({
     const mail = user.user.email;
 
   const [cid,setcid] = useState("");
- const [activeTab, setActiveTab] = useState(null);
+ const [activeTab, setActiveTab] = useState("Email");
  const [additionalAccounts, setAdditionalAccounts] = useState([]);
  const [filename, setfilename] = useState("");
 
@@ -48,8 +47,29 @@ function CreateCampaign({
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isFailedModalOpen, setIsFailedModalOpen] = useState(false);
   
-  const handleTabClick = (tabName) => {
-    setActiveTab(tabName);
+  const handleTabClick = (tabName) => setActiveTab(tabName);
+
+  const tabMeta = {
+    Analytics: {
+      title: "Performance",
+      desc: "Track opens, replies, and outcomes for this campaign.",
+    },
+    Email: {
+      title: "Email content",
+      desc: "Craft the subject and body your prospects will see.",
+    },
+    Leads: {
+      title: "Recipients",
+      desc: "Upload or review the lead list for this send.",
+    },
+    Schedule: {
+      title: "Timing",
+      desc: "Choose when your messages should go out.",
+    },
+    Others: {
+      title: "Accounts",
+      desc: "Add additional sender accounts to rotate and warm.",
+    },
   };
   const handleCloseSuccessModal = () => {
     setIsSuccessModalOpen(false); // Close the modal
@@ -87,6 +107,8 @@ function CreateCampaign({
     }
 
     const scheduled = dateInfo;
+    // keep a local campaign id that we can pass to api_four
+    let campaignId = id;
 
     try {
       
@@ -147,14 +169,19 @@ function CreateCampaign({
         schedulingData: scheduled,
         mail
       })
-  
+
       if (res.status === 200) {
-        id = await res.data.campaign._id;
+        // Next.js app router returns `campaign.id` (Prisma id). Support legacy `_id` just in case.
+        campaignId = res.data?.campaign?.id || res.data?.campaign?._id;
+        if (!campaignId) throw new Error('Campaign id missing from /api/campaign response');
+
+        setid?.(campaignId);      // update parent state if provided
+        setcid(campaignId);       // local state (for UI)
+
         setError('');
         setSuccessMessage('Campaign Stored successfully.');
         setIsSuccessModalOpen(true);
-        console.log("successfull", id)
-        setcid(id)
+        console.log("successful", campaignId);
       } else {
         console.error('Campaign failed.');
       }
@@ -169,7 +196,7 @@ function CreateCampaign({
         appPassword,
         data: tableData,
         dateInfo,
-        id,
+        id: campaignId,
         mail
       });
   
@@ -237,27 +264,20 @@ function CreateCampaign({
       // Now you can use the uploadedFilename in your logic as needed
     };
 
-    const renderCreateButton = () => {
-      if (activeTab === 'Email') {
-        return (
-          <button
-          style={{
-            borderRadius: '0.5rem', // equivalent to rounded-lg
-            backgroundColor: 'black', // equivalent to bg-black
-            color: 'white', // equivalent to text-white
-            padding: '12px 80px',
-            cursor:"pointer" ,
-            // py-3 px-20, assuming Tailwind's default spacing scale
-          }}
-            onClick={sendEmailDataToApi}
-          >
-            Send
-          </button>
-        );
-      } else {
-        return null; // Hide the button for other tabs
-      }
-    };
+  const renderCreateButton = () => {
+    if (activeTab === 'Email') {
+      return (
+        <button
+          className="rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5"
+          onClick={sendEmailDataToApi}
+        >
+          Send campaign
+        </button>
+      );
+    } else {
+      return null; // Hide the button for other tabs
+    }
+  };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -284,65 +304,64 @@ function CreateCampaign({
 
   return (
   
-    <div className="create-campaign-container">
-<div className="tab-buttons-container">
-  <button
-    onClick={() => handleTabClick('Analytics')}
-    className={`tab-button ${activeTab === 'Analytics' ? 'tab-button-active' : 'tab-button-inactive'}`}
-  >
-    Analytics
-  </button>
-  <button
-    onClick={() => handleTabClick('Email')}
-    className={`tab-button ${activeTab === 'Email' ? 'tab-button-active' : 'tab-button-inactive'}`}
-  >
-    Email
-  </button>
-  <button
-    onClick={() => handleTabClick('Leads')}
-    className={`tab-button ${activeTab === 'Leads' ? 'tab-button-active' : 'tab-button-inactive'}`}
-  >
-    Leads
-  </button>
-  <button
-    onClick={() => handleTabClick('Schedule')}
-    className={`tab-button ${activeTab === 'Schedule' ? 'tab-button-active' : 'tab-button-inactive'}`}
-  >
-    Schedule
-  </button>
-  <button
-    onClick={() => handleTabClick('Others')}
-    className={`tab-button ${activeTab === 'Others' ? 'tab-button-active' : 'tab-button-inactive'}`}
-  >
-    Others
-  </button>
-</div>
-
-        
-        <div className="tab-content">
-        {renderTabContent()} <br />
-        
-        
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-50 shadow-2xl backdrop-blur">
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.2em] text-emerald-300">Create</p>
+          <h2 className="text-xl font-semibold">Build your campaign</h2>
         </div>
-        <div className="send-button-container">{renderCreateButton()}</div><br />
-        {error && <p className="error-message">{error}</p>} 
-        
-        
-        {isSuccessModalOpen && (
-              <SuccessModal
-                SuccessMessage={successMessage}
-                onClose={handleCloseSuccessModal}
-              />
-            )}
-
-        { isFailedModalOpen && (
-              <FailedModal
-                FailedMessage={FailedMessage}
-                onClose={handleCloseFailedModal}
-              />
-            )}
+        <div className="inline-flex gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200">
+          <span>Steps:</span>
+          <span className="font-semibold text-emerald-300">Email → Leads → Schedule → Accounts → Analytics</span>
+        </div>
       </div>
-   
+
+      <div className="grid gap-3 rounded-2xl border border-white/10 bg-white/5 p-3 text-slate-50 shadow-2xl backdrop-blur">
+        <div className="flex flex-wrap gap-2">
+          {["Email", "Leads", "Schedule", "Others", "Analytics"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => handleTabClick(tab)}
+              className={`rounded-full px-3 py-2 text-xs font-semibold transition ${
+                activeTab === tab
+                  ? "bg-gradient-to-r from-blue-500 to-emerald-400 text-slate-900 shadow-lg"
+                  : "border border-white/15 bg-white/5 text-slate-100 hover:bg-white/10"
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        <div className="rounded-xl border border-white/5 bg-white/5 p-4 space-y-2">
+          <div>
+            <p className="text-xs uppercase tracking-[0.2em] text-emerald-300">{tabMeta[activeTab]?.title}</p>
+            <p className="text-sm text-slate-200">{tabMeta[activeTab]?.desc}</p>
+          </div>
+          <div className="pt-2">{renderTabContent()}</div>
+        </div>
+
+        <div className="flex justify-end">
+          <div className="send-button-container">{renderCreateButton()}</div>
+        </div>
+
+        {error && <p className="rounded-lg border border-rose-400/40 bg-rose-500/10 px-3 py-2 text-sm text-rose-100">{error}</p>}
+
+        {isSuccessModalOpen && (
+          <SuccessModal
+            SuccessMessage={successMessage}
+            onClose={handleCloseSuccessModal}
+          />
+        )}
+
+        {isFailedModalOpen && (
+          <FailedModal
+            FailedMessage={FailedMessage}
+            onClose={handleCloseFailedModal}
+          />
+        )}
+      </div>
+    </div>
   );
 }
 

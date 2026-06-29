@@ -1,7 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './selectedaccount.css'
 import SuccessModal from "./SuccessModal";
 import { useSession } from 'next-auth/react';
 
@@ -58,43 +57,52 @@ const SelectedAccount = ({ onAccountSelected }) => {
   };
 
   return (
-    <div >
-    <label className="account-chooser-label">Choose accounts:</label>
-    <div className="account-selection-container">
-      {accounts.map(account => (
-        <div key={account._id} className="account-checkbox-item">
-          <input
-            type="checkbox"
-            id={`account-${account._id}`}
-            onChange={(e) => handleAccountChange(account._id, e.target.checked)}
-            checked={selectedAccounts.some(selected => selected._id === account._id)}
-            className="account-checkbox-input"
-          />
-          <label htmlFor={`account-${account._id}`} className="account-checkbox-label">
-            {account.name} ({account.email})
-          </label>
+    <div className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-50 shadow-2xl backdrop-blur">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.2em] text-emerald-300">Accounts</p>
+          <p className="text-sm text-slate-200">Select additional sender accounts to rotate.</p>
         </div>
-      ))}
+      </div>
+
+      <div className="space-y-2 rounded-xl border border-white/10 bg-white/5 p-3 max-h-60 overflow-auto">
+        {accounts.map((account) => (
+          <label
+            key={account._id}
+            className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm hover:bg-white/10"
+          >
+            <input
+              type="checkbox"
+              className="h-4 w-4 accent-emerald-400"
+              onChange={(e) => handleAccountChange(account._id, e.target.checked)}
+              checked={selectedAccounts.some((selected) => selected._id === account._id)}
+            />
+            <span className="font-semibold">{account.email}</span>
+          </label>
+        ))}
+        {accounts.length === 0 && (
+          <div className="text-xs text-slate-300">No additional accounts found. Add accounts first.</div>
+        )}
+      </div>
+
+      <button
+        onClick={handleConfirmSelection}
+        className="rounded-xl bg-gradient-to-r from-blue-500 to-emerald-400 px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg transition hover:-translate-y-0.5"
+      >
+        Confirm selection
+      </button>
+
+      {isSuccessModalOpen && (
+        <SuccessModal
+          SuccessMessage={successMessage}
+          onClose={handleCloseSuccessModal}
+        />
+      )}
     </div>
-    <button onClick={handleConfirmSelection} className="confirm-selection-button">
-      Confirm Selection
-    </button>
-
-    {isSuccessModalOpen && (
-      <SuccessModal
-        SuccessMessage={successMessage}
-        onClose={handleCloseSuccessModal}
-      />
-    )}
-
-  </div>
-  
-  
   );
 };
 
 export default SelectedAccount;
-
 
 
 

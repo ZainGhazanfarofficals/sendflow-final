@@ -1,0 +1,137 @@
+====================================================
+  SENDFLOW — LOCAL INSTALLATION GUIDE
+====================================================
+
+PREREQUISITES
+-------------
+Install the following before you begin:
+
+  1. Docker Desktop
+     https://www.docker.com/products/docker-desktop
+     (Includes both Docker and Docker Compose)
+
+  2. Git
+     https://git-scm.com/downloads
+
+That's all you need. Node.js and PostgreSQL are handled inside Docker.
+
+
+----------------------------------------------------
+STEP 1 — CLONE THE REPOSITORY
+----------------------------------------------------
+
+Open a terminal (Mac/Linux) or Command Prompt (Windows) and run:
+
+  git clone <repository-url>
+  cd Sendflow-Web
+
+
+----------------------------------------------------
+STEP 2 — CREATE YOUR ENVIRONMENT FILE
+----------------------------------------------------
+
+Copy the example environment file:
+
+  Mac/Linux:
+    cp .env.example .env.local
+
+  Windows:
+    copy .env.example .env.local
+
+Now open .env.local in any text editor and fill in the values:
+
+  NEXTAUTH_SECRET
+    A random secret string. Generate one by running:
+      openssl rand -hex 32
+    (On Windows you can use any random 64-character hex string)
+
+  NEXT_PUBLIC_API_KEY and STRIPE_SECRET_KEY
+    Your Stripe publishable and secret keys.
+    Get them from: https://dashboard.stripe.com/apikeys
+    Use the "test" keys for local development.
+
+  GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET
+    Create OAuth credentials at: https://console.cloud.google.com
+    Under APIs & Services > Credentials > Create Credentials > OAuth 2.0 Client ID
+    Set the Authorized Redirect URI to:
+      http://localhost:3000/api/auth/callback/google
+
+  EMAIL_SENDER and EMAIL_SENDER_APP_PASSWORD
+    A Gmail account used to send emails from the app.
+    The App Password is NOT your Gmail password — generate one at:
+      https://myaccount.google.com/apppasswords
+    (Requires 2-Step Verification enabled on the Gmail account)
+
+  Leave DATABASE_URL, NEXTAUTH_URL, NEXT_PUBLIC_URL,
+  SMTP_HOST, SMTP_PORT, SMTP_SECURE as-is for local Docker setup.
+
+
+----------------------------------------------------
+STEP 3 — START THE APP
+----------------------------------------------------
+
+Make sure Docker Desktop is running, then:
+
+  docker compose up --build
+
+The first run will take 3–5 minutes to download images and build.
+Subsequent starts are much faster.
+
+When you see:
+  ✓ Ready on http://localhost:3000
+
+Open your browser and go to: http://localhost:3000
+
+
+----------------------------------------------------
+STEP 4 — STOPPING THE APP
+----------------------------------------------------
+
+Press Ctrl+C in the terminal to stop, then run:
+
+  docker compose down
+
+To also delete the database data (full reset):
+
+  docker compose down -v
+
+
+----------------------------------------------------
+TROUBLESHOOTING
+----------------------------------------------------
+
+Port 3000 already in use:
+  Another app is using port 3000. Stop it, or change the port in
+  docker-compose.yml from "3000:3000" to e.g. "3001:3000" and
+  access the app at http://localhost:3001
+
+Port 5432 already in use:
+  A local PostgreSQL is running. Stop it or change the db port in
+  docker-compose.yml from "5432:5432" to e.g. "5433:5432"
+
+Build fails / can't connect to Docker:
+  Make sure Docker Desktop is open and running before running
+  docker compose commands.
+
+Database errors on first start:
+  The app runs migrations automatically on startup. If it fails,
+  stop with Ctrl+C and try again — the database container may
+  still have been initializing.
+
+Environment variable errors:
+  Double-check .env.local has no extra spaces around the = sign
+  and all required fields are filled in.
+
+
+----------------------------------------------------
+QUICK REFERENCE
+----------------------------------------------------
+
+  Start:    docker compose up --build
+  Stop:     docker compose down
+  Logs:     docker compose logs -f app
+  DB reset: docker compose down -v
+
+  App URL:  http://localhost:3000
+
+====================================================

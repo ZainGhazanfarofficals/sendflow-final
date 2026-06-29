@@ -1,7 +1,4 @@
-import { connectMongoDB } from 'lib/mongodb';
-import EmailTracking from 'models/EmailTracking';
-
-
+import prisma from '@/lib/prisma';
 
 export default async function handler(req, res) {
   try {
@@ -11,8 +8,7 @@ export default async function handler(req, res) {
     if (!mail) {
       return res.status(400).json({ error: 'mail parameter is missing.' });
     }
-    await connectMongoDB();
-    const trackingData = await EmailTracking.find({user: mail });
+    const trackingData = await prisma.emailTracking.findMany({ where: { user: mail } });
 
     if (!trackingData) {
       return res.status(404).json({ error: 'Tracking data not found.' });

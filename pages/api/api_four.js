@@ -1,6 +1,5 @@
 import { sendMail } from "service/mailService";
-import { connectMongoDB } from 'lib/mongodb';
-import EmailTracking from "models/EmailTracking";
+import prisma from "@/lib/prisma";
 
 const handler = async (req, res) => {
   try {
@@ -17,21 +16,21 @@ const handler = async (req, res) => {
         const nameRegex = /\{name\}/g;
         const emailRegex = /\{email\}/g;
 
-        await connectMongoDB();
-
         // A function to send emails and update tracking
         const processEmailSending = async (accountEmail, accountPassword, item) => {
           const { name, email: em, company, other } = item;
           const sub = subject.replace(nameRegex, name).replace(companyRegex, company).replace(otherRegex, other);
           const bodies = body.replace(nameRegex, name).replace(companyRegex, company).replace(otherRegex, other).replace(emailRegex, em);
 
-          const existingRecord = await EmailTracking.findOne({ campid: id });
-          if (existingRecord) {
-            existingRecord.sent += 1;
-            await existingRecord.save();
-          } else {
-            await EmailTracking.create({ user: mail, campid: id, sent: 1 });
+          if (!id) {
+            throw new Error('Campaign id is missing; cannot record tracking');
           }
+
+          await prisma.emailTracking.upsert({
+            where: { campid: id },
+            update: { sent: { increment: 1 } },
+            create: { user: mail ?? 'unknown', campid: id, sent: 1, opens: 0, replies: 0 },
+          });
 
           return sendMail(sub, em, bodies, accountEmail, accountPassword, dateInfo, id);
         };

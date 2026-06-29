@@ -1,5 +1,4 @@
-import Entry from '@/models/Entries';
-import { connectMongoDB } from '@/lib/mongodb';
+import prisma from '@/lib/prisma';
 
 
 export default async function handler(req, res) {
@@ -8,21 +7,17 @@ export default async function handler(req, res) {
     method,
   } = req;
 
-  await connectMongoDB();
-
   switch (method) {
     case 'GET':
-      const entry = await Entry.findById(id);
+      const entry = await prisma.entry.findUnique({ where: { id } });
       return res.json(entry);
 
     case 'PUT':
-      const updatedEntry = await Entry.findByIdAndUpdate(id, req.body, {
-        new: true,
-      });
+      const updatedEntry = await prisma.entry.update({ where: { id }, data: req.body });
       return res.json(updatedEntry);
 
     case 'DELETE':
-      await Entry.findByIdAndDelete(id);
+      await prisma.entry.delete({ where: { id } });
       return res.status(200).end();
 
     default:

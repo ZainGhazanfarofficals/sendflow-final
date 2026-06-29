@@ -3,7 +3,6 @@ import React, { useState,useEffect } from 'react';
 import ExcelJS from 'exceljs';
 import SuccessModal from "./SuccessModal";
 import axios from 'axios';
-import './excel.css'
 
 const ExcelImport = ({ onTableDataChange,tableData:tableprop, file }) => {
   const [tableData, setTableData] = useState([]);
@@ -149,44 +148,41 @@ const ExcelImport = ({ onTableDataChange,tableData:tableprop, file }) => {
   };
   
   const renderTableRowsFile = (data) => {
-    if (data.length > 0) {
-      const columns = Object.keys(data[0]);
-      const columnNames = {
-        column1: 'Name',
-        column2: 'Email',
-        column3: 'Company',
-        column4: 'Other',
-      };
-  
-      return (
-        <table className="table">
-        <thead>
+    if (data.length === 0) return null;
+    const columns = Object.keys(data[0]);
+
+    return (
+      <table className="min-w-[420px] w-full text-left text-xs text-slate-100">
+        <thead className="bg-white/5 text-[11px] uppercase tracking-wide text-slate-300">
           <tr>
             {columns.map((header, headerIndex) => (
-              <th key={headerIndex} className="th">{header}</th>
+              <th key={headerIndex} className="px-3 py-2">
+                {header}
+              </th>
             ))}
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-white/5">
           {data.map((row, rowIndex) => (
-            <tr key={rowIndex}>
+            <tr key={rowIndex} className="hover:bg-white/5">
               {columns.map((columnName, cellIndex) => {
                 const cellValue = row[columnName];
                 let displayValue;
-      
-                if (cellValue && typeof cellValue === 'object') {
-                  // Check if the object is empty
-                  if (Object.keys(cellValue).length === 0) {
-                    displayValue = ''; // Render empty string for empty objects
-                  } else {
-                    displayValue = cellValue.text || ''; // Render 'text' property or empty string if 'text' is not available
-                  }
+
+                if (cellValue && typeof cellValue === "object") {
+                  displayValue =
+                    Object.keys(cellValue).length === 0
+                      ? ""
+                      : cellValue.text || "";
                 } else {
-                  displayValue = cellValue != null ? cellValue : ''; // Render the cellValue if it's not null or undefined, otherwise render empty string
+                  displayValue = cellValue ?? "";
                 }
-      
+
                 return (
-                  <td key={`${rowIndex}-${cellIndex}`} className="td-border">
+                  <td
+                    key={`${rowIndex}-${cellIndex}`}
+                    className="px-3 py-2 text-[11px] text-slate-200"
+                  >
                     {displayValue}
                   </td>
                 );
@@ -195,11 +191,7 @@ const ExcelImport = ({ onTableDataChange,tableData:tableprop, file }) => {
           ))}
         </tbody>
       </table>
-      
-      
-      );
-    }
-    return null; // Return null if data is empty
+    );
   };
   
   
@@ -208,59 +200,54 @@ const ExcelImport = ({ onTableDataChange,tableData:tableprop, file }) => {
 
   
   return (
-    <div className="excel-import-container">
-      <input
-        required
-        style={{ display: 'none' }}
-        type="file"
-        onChange={importExcel}
-      />
-      <label className="label-block">
-        Upload Excel File:
-        <input
-          type="file"
-          accept=".xlsx"
-          onChange={importExcel}
-          className="input-file"
-        />
-      </label>
-  
-      {tableData.length > 0 && (
-  <table className="table">
-    <thead>
-      <tr>
-        {Object.keys(tableData[0]).map((header, headerIndex) => (
-          <th key={headerIndex} className="th">{header.charAt(0).toUpperCase() + header.slice(1)}</th>
-        ))}
-      </tr>
-    </thead>
-    <tbody>
-      {tableData.map((row, rowIndex) => (
-        <tr key={rowIndex}>
-          <td className="td-border">{row.name}</td>
-          <td className="td-border">{row.email}</td>
-          <td className="td-border">{row.company}</td>
-          <td className="td-border">{row.other}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-)}
-
-  
-      {fileData.length > 0 && (
+    <div className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-50 shadow-2xl backdrop-blur">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
+          <p className="text-xs uppercase tracking-[0.2em] text-emerald-300">Leads</p>
+          <p className="text-sm text-slate-200">Upload an .xlsx with columns: name, email, company, other.</p>
+        </div>
+        <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-3 py-2 text-sm font-semibold">
+          <span>Choose file</span>
+          <input type="file" accept=".xlsx" onChange={importExcel} className="hidden" />
+        </label>
+      </div>
+
+      {tableData.length > 0 && (
+        <div className="overflow-x-auto rounded-xl border border-white/10 bg-white/5">
+          <table className="min-w-[420px] w-full text-left text-xs text-slate-100">
+            <thead className="bg-white/5 text-[11px] uppercase tracking-wide text-slate-300">
+              <tr>
+                {Object.keys(tableData[0]).map((header, headerIndex) => (
+                  <th key={headerIndex} className="px-3 py-2">
+                    {header.charAt(0).toUpperCase() + header.slice(1)}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {tableData.map((row, rowIndex) => (
+                <tr key={rowIndex} className="hover:bg-white/5">
+                  <td className="px-3 py-2">{row.name}</td>
+                  <td className="px-3 py-2 break-all font-mono text-[11px] text-slate-300">{row.email}</td>
+                  <td className="px-3 py-2">{row.company}</td>
+                  <td className="px-3 py-2">{row.other}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {fileData.length > 0 && (
+        <div className="overflow-x-auto rounded-xl border border-white/10 bg-white/5 p-3">
           {renderTableRowsFile(fileData.slice(1))}
         </div>
       )}
-  
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-  
+
+      {error && <p className="text-sm text-rose-200">{error}</p>}
+
       {isSuccessModalOpen && (
-        <SuccessModal
-          SuccessMessage={successMessage}
-          onClose={handleCloseSuccessModal}
-        />
+        <SuccessModal SuccessMessage={successMessage} onClose={handleCloseSuccessModal} />
       )}
     </div>
   );

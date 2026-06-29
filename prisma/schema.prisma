@@ -1,0 +1,77 @@
+// Prisma schema for PostgreSQL
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OrderStatus {
+  pending
+  completed
+  failed
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]
+}
+
+model Campaign {
+  id             String   @id @default(cuid())
+  user           String
+  email          String
+  appPassword    String
+  subject        String
+  body           String
+  excelFile      String
+  schedulingData String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Entry {
+  id          String   @id @default(cuid())
+  userId      String
+  email       String
+  appPassword String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Reply {
+  id          String   @id @default(cuid())
+  user        String
+  senderEmail String
+  content     String
+  recipients  String
+  timestamp   DateTime @default(now())
+}
+
+model EmailTracking {
+  id      String @id @default(cuid())
+  campid  String @unique
+  user    String
+  opens   Int    @default(0)
+  sent    Int    @default(0)
+  replies Int    @default(0)
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  userId          String?
+  amount          Int
+  paymentIntentId String
+  status          OrderStatus @default(pending)
+  createdAt       DateTime    @default(now())
+  user            User?       @relation(fields: [userId], references: [id])
+}
