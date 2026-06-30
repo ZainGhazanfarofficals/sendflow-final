@@ -39,6 +39,7 @@ export const authOptions = {
           };
         } catch (error) {
           console.log("Error: ", error);
+          return null;
         }
       },
 
@@ -93,9 +94,10 @@ export const authOptions = {
       }
       return session;
     },
-    // Force-safe redirects to dashboard analytics (return path to avoid broken baseUrl)
-    async redirect() {
-      return "/dashboard/analytics";
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith(baseUrl)) return url;
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      return `${baseUrl}/dashboard/analytics`;
     },
   },
   debug: process.env.NODE_ENV === "development",

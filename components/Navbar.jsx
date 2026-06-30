@@ -33,7 +33,7 @@ export default function Navbar({ session }) {
   };
 
   const handleSignOut = async () => {
-    await signOut();
+    await signOut({ callbackUrl: "/" });
   };
 
   const navLinks = [
